@@ -120,6 +120,12 @@ void* tape_data;
 size_t tape_size;
 int joymap[16];
 
+//start custom changes
+
+uint8_t *mem_data;
+
+//end custom changes
+
 static const struct { unsigned x; unsigned y; } keyb_positions[4] = {
    { 32, 40 }, { 40, 88 }, { 48, 136 }, { 32, 184 }
 };
@@ -450,10 +456,10 @@ int update_variables(int force)
       settings_current.slt_traps = 1;
    } else {
       // Fastload disabled
-      settings_current.fastload = 0;
-      settings_current.accelerate_loader = 0;
-      settings_current.tape_traps = 0;
-      settings_current.slt_traps = 0;
+      settings_current.fastload = 1;
+      settings_current.accelerate_loader = 1;
+      settings_current.tape_traps = 1;
+      settings_current.slt_traps = 1;
    }
 
    settings_current.sound_load = coreopt(env_cb, core_vars, "fuse_load_sound", NULL) != 1;
@@ -631,6 +637,9 @@ void retro_init(void)
    retro_set_controller_port_device( 2, RETRO_DEVICE_SPECTRUM_KEYBOARD );
    
    display_joystick_type = FALSE;
+
+   mem_data = malloc(0x10000);
+
 }
 
 static libspectrum_id_t identify_file(const void* data, size_t size)
@@ -832,12 +841,16 @@ bool retro_load_game(const struct retro_game_info *info)
 
 size_t retro_get_memory_size(unsigned id)
 {
-   return 0;
+   return 0x10000;
 }
 
 void *retro_get_memory_data(unsigned id)
 {
-   return NULL;
+   for (int i = 0; i<0xFFFF; i++){
+      mem_data[i] = readbyte_internal(0xC1D2);
+   }
+
+   return (void *) mem_data;
 }
 
 void retro_set_video_refresh(retro_video_refresh_t cb)
@@ -1119,6 +1132,8 @@ void retro_deinit(void)
       fuse_init_called = 0;
       fuse_end();
    }
+
+   free(mem_data);
 }
 
 void retro_set_controller_port_device(unsigned port, unsigned device)
