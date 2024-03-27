@@ -847,7 +847,7 @@ size_t retro_get_memory_size(unsigned id)
 void *retro_get_memory_data(unsigned id)
 {
    for (int i = 0; i<0xFFFF; i++){
-      mem_data[i] = readbyte_internal(0xC1D2);
+      mem_data[i] = readbyte_internal(i);
    }
 
    return (void *) mem_data;
