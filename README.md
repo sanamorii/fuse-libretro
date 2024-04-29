@@ -3,7 +3,7 @@
 **fuse-libretro** is a perpetual *work in progress* port of the [Fuse Unix Spectrum Emulator](http://fuse-emulator.sourceforge.net/) to [libretro](http://www.libretro.com/). The port was originally developed on Windows with MinGW (32 bits), but it's known to compile and run on Linux x86/x64 and ARM and other systems. **fuse-libretro** has been tested with the latest RetroArch releases and some [Lakka](http://www.lakka.tv/) builds.
 
 ## Changes [QIANG CAI]
-This fork implements the missing `void *retro_get_memory_data(unsigned id);` and void *retro_get_memory_size(unsigned id);` functions that the Libretro API provides. 
+This fork implements the missing `void *retro_get_memory_data(unsigned id);` and `void *retro_get_memory_size(unsigned id);` functions that the Libretro API provides. 
 Implementation requires improvement as it leverages `readbyte_internal` rather than returning the actual memory array.
 
 ## Build
